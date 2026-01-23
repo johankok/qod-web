@@ -1,0 +1,4 @@
+messages:
+  - role: user
+    content: analyse this repository and give me a summary of what each file does
+model: deepseek/deepseek-r1

@@ -14,6 +14,10 @@ RUN npm ci --omit=dev
 # Runtime stage: hardened minimal image
 FROM registry.access.redhat.com/hi/nodejs:22
 
+LABEL org.opencontainers.image.title="qod-web" \
+      org.opencontainers.image.description="Quote of the Day frontend" \
+      org.opencontainers.image.source="https://github.com/johankok/qod-web"
+
 ENV APP_ROOT=/tmp/app
 
 WORKDIR $APP_ROOT

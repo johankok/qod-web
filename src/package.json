@@ -6,7 +6,7 @@
 		"start": "node app.js"
 	},
 	"dependencies": {
-		"body-parser": "1.18.*",
+		"body-parser": "2.3.*",
 		"ejs": "2.5.x",
 		"express": "5.*",
 		"dateformat": "^3.0.*",

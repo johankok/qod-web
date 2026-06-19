@@ -9,7 +9,7 @@
 		"body-parser": "1.18.*",
 		"ejs": "2.5.x",
 		"express": "4.*",
-		"dateformat": "^3.0.*",
+		"dateformat": "^5.0.*",
 		"request": "2.88.*"
 
 	},

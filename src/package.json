@@ -6,7 +6,7 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "dateformat": "^3.0.*",
+    "dateformat": "^5.0.*",
     "ejs": "6.0.x",
     "express": "5.*"
   },

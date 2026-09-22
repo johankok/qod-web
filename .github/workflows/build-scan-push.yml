@@ -34,10 +34,13 @@ jobs:
           containerfiles: |
             ./Containerfile
 
+      - name: Export image for scanning
+        run: podman save --format docker-archive -o image.tar ${{ steps.build-image.outputs.image-with-tag }}
+
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
-          image-ref: ${{ steps.build-image.outputs.image-with-tag }}
+          input: image.tar
           format: sarif
           output: trivy-results.sarif
           severity: CRITICAL,HIGH

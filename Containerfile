@@ -1,5 +1,5 @@
 # Build stage: install dependencies
-FROM registry.access.redhat.com/ubi9/nodejs-22 AS builder
+FROM registry.access.redhat.com/hi/nodejs:26 AS builder
 
 ENV APP_ROOT=/opt/app-root
 
@@ -12,7 +12,7 @@ COPY src/ .
 RUN npm ci --omit=dev
 
 # Runtime stage: hardened minimal image
-FROM registry.access.redhat.com/hi/nodejs:22
+FROM registry.access.redhat.com/hi/nodejs:26
 
 LABEL org.opencontainers.image.title="qod-web" \
       org.opencontainers.image.description="Quote of the Day frontend" \

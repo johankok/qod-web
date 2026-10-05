@@ -24,6 +24,7 @@ jobs:
       contents: read
       packages: write
       security-events: write
+      id-token: write
 
     steps:
       - name: Checkout repository
@@ -75,6 +76,29 @@ jobs:
           tags: ${{ steps.build-image.outputs.tags }}
           registry: ${{ env.IMAGE_REGISTRY }}
 
+      - name: Install Cosign
+        if: github.event_name != 'pull_request'
+        uses: sigstore/cosign-installer@v4.1.2
+
+      - name: Sign image with Cosign (keyless)
+        if: github.event_name != 'pull_request'
+        env:
+          IMAGE_REF: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push-image.outputs.digest }}
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$REGISTRY_TOKEN" | cosign login ghcr.io -u "$REGISTRY_USER" --password-stdin
+          cosign sign --yes "$IMAGE_REF"
+
+      - name: Verify image signature
+        if: github.event_name != 'pull_request'
+        env:
+          IMAGE_REF: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.push-image.outputs.digest }}
+        run: |
+          cosign verify "$IMAGE_REF" \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            --certificate-identity-regexp "^https://github\.com/${{ github.repository }}/\.github/workflows/build-scan-push\.yml@"
+
       - name: Print image reference
         if: github.event_name != 'pull_request'
-        run: echo "Pushed ${{ steps.push-image.outputs.registry-path }}"
+        run: echo "Pushed and signed ${{ steps.push-image.outputs.registry-path }}"

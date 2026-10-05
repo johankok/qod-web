@@ -6,11 +6,15 @@ on:
   pull_request:
     branches: [master, main]
   workflow_dispatch:
+  schedule:
+    # Weekly rebuild (Mondays 04:00 UTC) to pick up base image updates
+    - cron: '0 4 * * 1'
 
 env:
   IMAGE_NAME: qod-web
   IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
-  IMAGE_TAGS: latest ${{ github.sha }}
+  # Scheduled rebuilds only refresh `latest`, so the per-commit SHA tags stay immutable
+  IMAGE_TAGS: ${{ github.event_name == 'schedule' && 'latest' || format('latest {0}', github.sha) }}
 
 jobs:
   build-scan-push:

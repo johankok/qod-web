@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "dateformat": "^3.0.*",
-    "ejs": "6.0.x",
+    "ejs": "7.0.x",
     "express": "5.*"
   },
   "repository": {}
